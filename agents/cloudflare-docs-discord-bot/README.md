@@ -1,6 +1,6 @@
 # Cloudflare Docs Discord Bot
 
-A slightly vibe-coded example Discord bot that answers questions about Cloudflare built with the [Cloudflare Agents SDK](https://github.com/cloudflare/agents) and [Cloudflare's Documentation MCP server](https://github.com/cloudflare/mcp-server-cloudflare/tree/main/apps/docs-vectorize) for accuracy.
+A slightly vibe-coded example Discord bot that answers questions about Cloudflare. Built with [Cloudflare Agents SDK](https://github.com/cloudflare/agents) and [Cloudflare's Documentation MCP server](https://github.com/cloudflare/mcp-server-cloudflare/tree/main/apps/docs-vectorize) for accuracy.
 
 ![alt](images/example.png)
 
