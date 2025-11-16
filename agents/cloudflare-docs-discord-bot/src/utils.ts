@@ -1,4 +1,3 @@
-// Utility function to add timeout to a promise
 export async function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number,

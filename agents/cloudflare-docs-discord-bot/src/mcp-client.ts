@@ -1,7 +1,6 @@
 import type { MCPTool, MCPResponse } from './types';
 import { withTimeout } from './utils';
 
-// mcp client
 export class CloudflareMCPClient {
   private tools: MCPTool[] = [];
   private serverUrl: string;
@@ -10,9 +9,7 @@ export class CloudflareMCPClient {
     this.serverUrl = serverUrl;
   }
 
-  /**
-   * Parse SSE (Server-Sent Events) response
-   */
+
   private parseSSE(text: string): any {
     const lines = text.trim().split('\n');
     let data = '';
@@ -47,7 +44,6 @@ export class CloudflareMCPClient {
 // mcp connection
   async initialize(): Promise<void> {
     try {
-      // Fetch available tools from the MCP server
       const response = await fetch(`${this.serverUrl}/mcp`, {
         method: 'POST',
         headers: {
@@ -80,7 +76,6 @@ export class CloudflareMCPClient {
       this.tools = data.result?.tools || [];
     } catch (error) {
       console.error('Failed to initialize MCP client:', error);
-      // Set default tool if connection fails
       this.tools = [{
         name: 'search_cloudflare_documentation',
         description: 'Search Cloudflare documentation for relevant information',
@@ -98,7 +93,6 @@ export class CloudflareMCPClient {
     }
   }
 
-// get mcp tools
   getTools(): MCPTool[] {
     return this.tools;
   }
@@ -131,7 +125,6 @@ export class CloudflareMCPClient {
         throw new Error(`Tool call failed: ${response.status} ${response.statusText}`);
       }
 
-      // Parse response (may be JSON or SSE)
       const contentType = response.headers.get('content-type') || '';
       const data = contentType.includes('text/event-stream')
         ? this.parseSSE(await response.text())

@@ -1,13 +1,3 @@
-/**
- * Cloudflare Docs Discord Bot
- *
- * A Discord bot that answers questions about Cloudflare using:
- * - Cloudflare Workers AI for translating docs to natural language (Qwen 2.5 Coder 32B)
- * - Cloudflare MCP Documentation Server as the source of truth
- * - Durable Objects for persistent conversation state per channel
- * - Discord slash commands
- */
-
 import {
   verifyDiscordRequest,
   handleDiscordInteraction,
@@ -16,7 +6,6 @@ import {
 } from './discord';
 import type { Env } from './types';
 
-// Export the Durable Object
 export { CloudflareDocsAgent } from './agent';
 
 // worker entry point
@@ -33,14 +22,11 @@ export default {
         return new Response('Invalid request signature', { status: 401 });
       }
 
-      // Parse interaction
       const interaction = await request.json() as DiscordInteraction;
 
-      // Handle the interaction
       return await handleDiscordInteraction(interaction, env, ctx);
     }
 
-    // Setup endpoint - register Discord commands
     if (url.pathname === '/setup' && request.method === 'POST') {
       try {
         await registerDiscordCommands(
@@ -64,7 +50,6 @@ export default {
       }
     }
 
-    // Health check endpoint
     if (url.pathname === '/health') {
       return Response.json({
         status: 'healthy',

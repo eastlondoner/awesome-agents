@@ -3,7 +3,6 @@ import { CloudflareMCPClient } from './mcp-client';
 import type { Env, AgentState, Message } from './types';
 import { withTimeout } from './utils';
 
-// Example: Using OpenAI instead of Workers AI
 // Uncomment this import and set OPENAI_API_KEY in your environment
 // import { OpenAI } from 'openai';
 
@@ -28,10 +27,7 @@ export class CloudflareDocsAgent extends Agent<Env, AgentState> {
     lastActivity: new Date().toISOString(),
   };
 
-  /**
-   * onStart - Called when agent instance initializes or resumes
-   * This is the SDK's lifecycle hook for initialization
-   */
+
   async onStart(): Promise<void> {
     // Initialize MCP client
     this.mcpClient = new CloudflareMCPClient(this.env.MCP_SERVER_URL);
@@ -86,7 +82,6 @@ export class CloudflareDocsAgent extends Agent<Env, AgentState> {
       if (!question || typeof question !== 'string') {
         return Response.json({ error: 'Question is required' }, { status: 400 });
       }
-      // Update user and channel IDs in state if provided
       if (userId && this.state.userId !== userId) {
         this.setState({ ...this.state, userId });
       }
@@ -107,17 +102,14 @@ export class CloudflareDocsAgent extends Agent<Env, AgentState> {
         conversationHistory: updatedHistory,
       });
 
-      // Generate answer
       const answer = await this.generateAnswer(question);
 
-      // Add assistant message to history
       const assistantMessage: Message = {
         role: 'assistant',
         content: answer,
         timestamp: new Date().toISOString(),
       };
 
-      // Update state with assistant message and last activity
       this.setState({
         ...this.state,
         conversationHistory: [...updatedHistory, assistantMessage],
@@ -138,11 +130,7 @@ export class CloudflareDocsAgent extends Agent<Env, AgentState> {
     }
   }
 
-  /**
-   * generateAnswer - Generate AI response using Workers AI or OpenAI
-   * 1. Workers AI (default) - Cloudflare's hosted models
-   * 2. OpenAI (commented example) - External AI provider
-   */
+// generate answer using documentation search and AI
   private async generateAnswer(question: string): Promise<string> {
     try {
       // Search the documentation for relevant information
@@ -156,15 +144,12 @@ export class CloudflareDocsAgent extends Agent<Env, AgentState> {
         throw new Error('Unable to find relevant documentation for this question');
       }
 
-      // Protect angle bracket placeholders from AI tokenization
-      // Replace <PLACEHOLDER> with {{PLACEHOLDER}} to prevent AI from corrupting them
+      // Replace <PLACEHOLDER> with {{PLACEHOLDER}} to prevent AI from corrupting them <- this was causing issues with some LLMs
       const protectedDocs = docResults.replace(/<([a-zA-Z][a-zA-Z0-9_-]*)>/g, '{{$1}}');
       const hasPlaceholders = protectedDocs !== docResults;
 
-      // Build context from conversation history (using SDK's state)
       const conversationContext = this.buildConversationContext();
 
-      // Create strict prompt that only uses provided documentation
       const systemPrompt = `You are a Cloudflare documentation assistant. Answer questions using ONLY the provided documentation.
 
 CRITICAL RULES:
