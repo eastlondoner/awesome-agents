@@ -78,12 +78,8 @@ export class CloudflareDocsAgent extends Agent<Env, AgentState> {
     }
   }
 
-  // fetch entry point
-  async fetch(request: Request): Promise<Response> {
-    return this.onRequest(request);
-  }
-
-  // handle requests
+  // Note: NOT overriding fetch() - this was causing the setName bug!
+  // The SDK's fetch() method handles request context properly
   async onRequest(request: Request): Promise<Response> {
     const url = new URL(request.url);
 

@@ -1,6 +1,6 @@
 # Cloudflare Docs Discord Bot
 
-A slightly vibe-coded example Discord bot that answers questions about Cloudflare. Built with [Cloudflare Agents SDK](https://github.com/cloudflare/agents) and [Cloudflare's Documentation MCP server](https://github.com/cloudflare/mcp-server-cloudflare/tree/main/apps/docs-vectorize) for accuracy.
+A slightly vibe-coded example Discord bot that answers questions about Cloudflare. Built with [Cloudflare Agents SDK](https://github.com/cloudflare/agents) and [Cloudflare's Documentation MCP server](https://github.com/cloudflare/mcp-server-cloudflare/tree/main/apps/docs-vectorize) for accuracy. **Note** The LLM does **not** do tool calling with the docs MCP, rather, it uses it to do RAG with the user query instead. 
 
 ![alt](images/example.png)
 
@@ -123,7 +123,6 @@ cloudflare-docs-discord-bot/
 │   ├── index.ts           # Worker entry point
 │   ├── agent.ts           # AI magic
 │   ├── discord.ts         # Discord interaction handlers
-│   ├── mcp-client.ts      # MCP server integration
 │   └── types.ts           # TypeScript type definitions
 ├── wrangler.jsonc         # Cloudflare Workers configuration
 ├── package.json           # Node.js dependencies
